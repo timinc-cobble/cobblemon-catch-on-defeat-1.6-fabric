@@ -3,6 +3,7 @@ package us.timinc.mc.cobblemon.catchondefeat.eventhandlers
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.util.getPlayer
+import net.minecraft.network.chat.Component
 import us.timinc.mc.cobblemon.catchondefeat.CatchOnDefeatMod
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties
 import java.util.*
@@ -18,5 +19,6 @@ object BattleFaintedHandler {
         val storage = Cobblemon.storage.getParty(player)
         if (CatchOnDefeatMod.config.heal) pokemon.heal()
         storage.add(pokemon)
+        player.sendSystemMessage(Component.translatable("catch_on_defeat.feedback.joined_team", pokemon.species.translatedName))
     }
 }

@@ -2,6 +2,7 @@ package us.timinc.mc.cobblemon.catchondefeat
 
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import us.timinc.mc.cobblemon.catchondefeat.config.CatchOnDefeatConfig
@@ -24,8 +25,13 @@ object CatchOnDefeatMod : ModInitializer {
             config = ConfigBuilder.load(CatchOnDefeatConfig::class.java, MOD_ID)
         }
 
-        CobblemonEvents.POKEMON_PROPERTY_INITIALISED.subscribe { evt ->
-            CatchOnDefeatProperties.register()
+        var initialized = false
+        ServerLifecycleEvents.SERVER_STARTED.register { evt ->
+            if (initialized) return@register
+            initialized = true
+            afterOnServer(1, evt.overworld()) {
+                CatchOnDefeatProperties.register()
+            }
         }
 
         CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, BattleFaintedHandler::handle)
