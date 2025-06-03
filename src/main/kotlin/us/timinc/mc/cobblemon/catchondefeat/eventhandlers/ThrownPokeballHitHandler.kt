@@ -9,7 +9,11 @@ import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProper
 object ThrownPokeballHitHandler {
     fun handle(evt: ThrownPokeballHitEvent) {
         val pokemon = evt.pokemon.pokemon
-        if (CatchOnDefeatMod.config.preventRegularCapture && CatchOnDefeatProperties.CATCH_ON_DEFEAT.pokemonMatcher(pokemon, true)) {
+        if (CatchOnDefeatMod.config.preventRegularCapture && CatchOnDefeatProperties.CATCH_ON_DEFEAT.pokemonMatcher(
+                pokemon,
+                true
+            )
+        ) {
             (evt.pokeBall.owner as? ServerPlayer)?.sendSystemMessage(Component.translatable("catch_on_defeat.feedback.cant_catch"))
             evt.cancel()
         }
