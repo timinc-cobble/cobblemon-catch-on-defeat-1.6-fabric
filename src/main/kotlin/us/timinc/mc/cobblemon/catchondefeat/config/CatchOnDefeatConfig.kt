@@ -4,4 +4,5 @@ class CatchOnDefeatConfig {
     val heal: Boolean = true
     val preventRegularCapture: Boolean = true
     val thereCanOnlyBeOnePlayerInBattle: Boolean = true
+    val everybodysCaughtThisWay: Boolean = false
 }

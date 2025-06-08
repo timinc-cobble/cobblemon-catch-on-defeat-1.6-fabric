@@ -15,7 +15,7 @@ object BattleFaintedHandler {
     fun handle(evt: BattleFaintedEvent) {
         val pokemon = evt.killed.effectedPokemon.clone()
         if (!evt.battle.isPvW || !pokemon.isWild()) return
-        if (!CATCH_ON_DEFEAT.pokemonMatcher(pokemon, true)) return
+        if (!CATCH_ON_DEFEAT.pokemonMatcher(pokemon, true) && !config.everybodysCaughtThisWay) return
 
         val players = evt.battle.playerUUIDs.mapNotNull(UUID::getPlayer)
 
