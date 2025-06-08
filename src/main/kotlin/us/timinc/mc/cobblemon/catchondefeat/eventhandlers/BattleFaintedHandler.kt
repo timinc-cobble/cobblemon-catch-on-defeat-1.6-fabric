@@ -13,7 +13,7 @@ import kotlin.random.Random.Default.nextFloat
 
 object BattleFaintedHandler {
     fun handle(evt: BattleFaintedEvent) {
-        val pokemon = evt.killed.effectedPokemon.clone()
+        val pokemon = evt.killed.effectedPokemon
         if (!evt.battle.isPvW || !pokemon.isWild()) return
         if (!CATCH_ON_DEFEAT.pokemonMatcher(pokemon, true) && !config.everybodysCaughtThisWay) return
 
@@ -48,13 +48,14 @@ object BattleFaintedHandler {
 
         val player = players.random()
 
+        val clonedPokemon = pokemon.clone()
         val storage = Cobblemon.storage.getParty(player)
-        if (config.heal) pokemon.heal()
-        storage.add(pokemon)
+        if (config.heal) clonedPokemon.heal()
+        storage.add(clonedPokemon)
         player.sendSystemMessage(
             Component.translatable(
                 "catch_on_defeat.feedback.joined_team",
-                pokemon.getDisplayName()
+                clonedPokemon.getDisplayName()
             )
         )
     }
