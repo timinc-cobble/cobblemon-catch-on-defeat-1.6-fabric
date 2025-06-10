@@ -14,12 +14,12 @@ public abstract class CancelThrownPokeballInBattle extends net.minecraft.world.e
     @org.spongepowered.asm.mixin.Final
     private static net.minecraft.network.syncher.EntityDataAccessor<Byte> CAPTURE_STATE;
 
-    @org.spongepowered.asm.mixin.Shadow
-    protected abstract void drop();
-
     public CancelThrownPokeballInBattle(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.ThrowableItemProjectile> entityType, double d, double e, double f, net.minecraft.world.level.Level level) {
         super(entityType, d, e, f, level);
     }
+
+    @org.spongepowered.asm.mixin.Shadow
+    protected abstract void drop();
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"), cancellable = true, remap = false)
     void cancelHitEntityInBattle(net.minecraft.world.phys.EntityHitResult hitResult, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
