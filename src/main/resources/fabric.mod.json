@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "catchondefeat",
-  "version": "1.6-fabric-1.2.1",
+  "version": "1.6-fabric-1.2.2",
   "name": "Catch On Defeat",
   "description": "Adds a new aspect to Pokemon in Cobblemon that, when defeated in 1v1 wild combat, causes them to join the player&#x27;s team.",
   "authors": [
@@ -22,5 +22,8 @@
     "minecraft": "1.21.1",
     "fabric": "*",
     "cobblemon": ">=1.6.0 <1.7.0"
-  }
+  },
+  "mixins": [
+    "mixins.catchondefeat.json"
+  ]
 }
