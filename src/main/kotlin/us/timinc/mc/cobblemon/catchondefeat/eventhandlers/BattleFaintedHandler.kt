@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.util.getPlayer
 import us.timinc.mc.cobblemon.catchondefeat.CatchOnDefeatMod.config
@@ -49,11 +50,15 @@ object BattleFaintedHandler {
         val storage = Cobblemon.storage.getParty(player)
         if (config.heal) clonedPokemon.heal()
         storage.add(clonedPokemon)
-        CobblemonEvents.POKEMON_CAPTURED.emit(PokemonCapturedEvent(
-            clonedPokemon,
-            player,
-            EmptyPokeBallEntity(player.level())
-        ))
+        if (config.countsAsCapture) {
+            CobblemonEvents.POKEMON_CAPTURED.emit(
+                PokemonCapturedEvent(
+                    clonedPokemon, player, EmptyPokeBallEntity(
+                        PokeBalls.POKE_BALL, player.level()
+                    )
+                )
+            )
+        }
         player.sendSystemMessage(
             CatchOnDefeatComponents.joinedTeam(clonedPokemon)
         )
