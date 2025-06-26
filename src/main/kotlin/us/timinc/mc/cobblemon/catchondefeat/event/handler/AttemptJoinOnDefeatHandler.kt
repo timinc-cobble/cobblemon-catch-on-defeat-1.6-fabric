@@ -1,17 +1,23 @@
-package us.timinc.mc.cobblemon.catchondefeat.eventhandlers
+package us.timinc.mc.cobblemon.catchondefeat.event.handler
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
+import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
+import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.util.getPlayer
 import us.timinc.mc.cobblemon.catchondefeat.CatchOnDefeatMod.config
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties.CATCH_ON_DEFEAT
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties.DEFEAT_JOIN_CHANCE
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties.MUST_BE_SOLOED
+import us.timinc.mc.cobblemon.catchondefeat.event.JoinDefeatEvent
 import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatComponents
+import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatEvents
 import java.util.*
 import kotlin.random.Random.Default.nextFloat
 
-object BattleFaintedHandler {
+object AttemptJoinOnDefeatHandler {
     fun handle(evt: BattleFaintedEvent) {
         val pokemon = evt.killed.effectedPokemon
         if (!evt.battle.isPvW || !pokemon.isWild()) return
@@ -42,12 +48,31 @@ object BattleFaintedHandler {
 
         val player = players.random()
 
+        CatchOnDefeatEvents.JOIN_DEFEAT_PRE.postThen(JoinDefeatEvent.Pre(
+            player, pokemon
+        ), {
+            return
+        }, {})
+
         val clonedPokemon = pokemon.clone()
         val storage = Cobblemon.storage.getParty(player)
         if (config.heal) clonedPokemon.heal()
         storage.add(clonedPokemon)
+        if (config.countsAsCapture) {
+            CobblemonEvents.POKEMON_CAPTURED.emit(
+                PokemonCapturedEvent(
+                    clonedPokemon, player, EmptyPokeBallEntity(
+                        PokeBalls.POKE_BALL, player.level()
+                    )
+                )
+            )
+        }
         player.sendSystemMessage(
             CatchOnDefeatComponents.joinedTeam(clonedPokemon)
+        )
+
+        CatchOnDefeatEvents.JOIN_DEFEAT_POST.emit(
+            JoinDefeatEvent.Post(player, pokemon)
         )
     }
 }
