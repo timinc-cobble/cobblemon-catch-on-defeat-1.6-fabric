@@ -1,4 +1,4 @@
-package us.timinc.mc.cobblemon.catchondefeat.eventhandlers
+package us.timinc.mc.cobblemon.catchondefeat.event.handler
 
 import com.cobblemon.mod.common.api.events.pokeball.ThrownPokeballHitEvent
 import net.minecraft.server.level.ServerPlayer
@@ -6,7 +6,7 @@ import us.timinc.mc.cobblemon.catchondefeat.CatchOnDefeatMod.config
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties
 import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatComponents
 
-object ThrownPokeballHitHandler {
+object CancelPokeballHitWhenOnlyJoinByDefeatHandler {
     fun handle(evt: ThrownPokeballHitEvent) {
         val pokemon = evt.pokemon.pokemon
         if (config.preventRegularCapture && (CatchOnDefeatProperties.CATCH_ON_DEFEAT.pokemonMatcher(

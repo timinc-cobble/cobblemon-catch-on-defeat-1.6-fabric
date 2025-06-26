@@ -8,8 +8,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import us.timinc.mc.cobblemon.catchondefeat.config.CatchOnDefeatConfig
 import us.timinc.mc.cobblemon.catchondefeat.config.ConfigBuilder
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties
-import us.timinc.mc.cobblemon.catchondefeat.eventhandlers.BattleFaintedHandler
-import us.timinc.mc.cobblemon.catchondefeat.eventhandlers.ThrownPokeballHitHandler
+import us.timinc.mc.cobblemon.catchondefeat.event.handler.AttemptJoinOnDefeatHandler
+import us.timinc.mc.cobblemon.catchondefeat.event.handler.CancelPokeballHitWhenOnlyJoinByDefeatHandler
 
 object CatchOnDefeatMod : ModInitializer {
     @Suppress("MemberVisibilityCanBePrivate")
@@ -34,7 +34,10 @@ object CatchOnDefeatMod : ModInitializer {
             }
         }
 
-        CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, BattleFaintedHandler::handle)
-        CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.LOWEST, ThrownPokeballHitHandler::handle)
+        CobblemonEvents.BATTLE_FAINTED.subscribe(Priority.LOWEST, AttemptJoinOnDefeatHandler::handle)
+        CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(
+            Priority.LOWEST,
+            CancelPokeballHitWhenOnlyJoinByDefeatHandler::handle
+        )
     }
 }
