@@ -6,14 +6,19 @@ import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.getPlayer
+import net.minecraft.server.level.ServerPlayer
 import us.timinc.mc.cobblemon.catchondefeat.CatchOnDefeatMod.config
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties.CATCH_ON_DEFEAT
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties.DEFEAT_JOIN_CHANCE
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties.MUST_BE_SOLOED
 import us.timinc.mc.cobblemon.catchondefeat.event.JoinDefeatEvent
+import us.timinc.mc.cobblemon.catchondefeat.holding.PokemonJoinPartyHolding
+import us.timinc.mc.cobblemon.catchondefeat.network.clientbound.ConfirmJoin
 import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatComponents
 import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatEvents
+import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatNetwork.sendClientPacket
 import java.util.*
 import kotlin.random.Random.Default.nextFloat
 
@@ -55,20 +60,31 @@ object AttemptJoinOnDefeatHandler {
         }, {})
 
         val clonedPokemon = pokemon.clone()
+
+        if (config.alwaysAcceptJoin) {
+            finishJoin(player, clonedPokemon)
+        } else {
+            val holdingId = UUID.randomUUID()
+            PokemonJoinPartyHolding.hold(PokemonJoinPartyHolding.Entry(holdingId, clonedPokemon, player))
+            sendClientPacket(ConfirmJoin.Packet(holdingId, clonedPokemon.getDisplayName()), player)
+        }
+    }
+
+    fun finishJoin(player: ServerPlayer, pokemon: Pokemon) {
         val storage = Cobblemon.storage.getParty(player)
-        if (config.heal) clonedPokemon.heal()
-        storage.add(clonedPokemon)
+        if (config.heal) pokemon.heal()
+        storage.add(pokemon)
         if (config.countsAsCapture) {
             CobblemonEvents.POKEMON_CAPTURED.emit(
                 PokemonCapturedEvent(
-                    clonedPokemon, player, EmptyPokeBallEntity(
+                    pokemon, player, EmptyPokeBallEntity(
                         PokeBalls.POKE_BALL, player.level()
                     )
                 )
             )
         }
         player.sendSystemMessage(
-            CatchOnDefeatComponents.joinedTeam(clonedPokemon)
+            CatchOnDefeatComponents.joinedTeam(pokemon)
         )
 
         CatchOnDefeatEvents.JOIN_DEFEAT_POST.emit(

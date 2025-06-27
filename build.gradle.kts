@@ -13,6 +13,7 @@ repositories {
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
     maven("https://maven.impactdev.net/repository/development/")
     maven("https://api.modrinth.com/maven")
+    maven("https://maven.wispforest.io")
 }
 
 dependencies {
@@ -28,6 +29,10 @@ dependencies {
 
     // Cobblemon
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}")
+
+    modImplementation("io.wispforest:owo-lib:${property("owo_version")}")
+    annotationProcessor("io.wispforest:owo-lib:${property("owo_version")}")
+    include("io.wispforest:owo-sentinel:${property("owo_version")}")
 }
 
 tasks {
