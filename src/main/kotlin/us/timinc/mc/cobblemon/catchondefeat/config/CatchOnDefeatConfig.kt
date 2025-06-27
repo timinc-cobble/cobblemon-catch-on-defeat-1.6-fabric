@@ -6,4 +6,5 @@ class CatchOnDefeatConfig {
     val thereCanOnlyBeOnePlayerInBattle: Boolean = true
     val everybodysCaughtThisWay: Boolean = false
     val countsAsCapture: Boolean = true
+    val alwaysAcceptJoin: Boolean = false
 }

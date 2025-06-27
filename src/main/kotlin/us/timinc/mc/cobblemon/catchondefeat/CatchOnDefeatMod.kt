@@ -5,11 +5,13 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import net.minecraft.resources.ResourceLocation
 import us.timinc.mc.cobblemon.catchondefeat.config.CatchOnDefeatConfig
 import us.timinc.mc.cobblemon.catchondefeat.config.ConfigBuilder
 import us.timinc.mc.cobblemon.catchondefeat.customproperties.CatchOnDefeatProperties
 import us.timinc.mc.cobblemon.catchondefeat.event.handler.AttemptJoinOnDefeatHandler
 import us.timinc.mc.cobblemon.catchondefeat.event.handler.CancelPokeballHitWhenOnlyJoinByDefeatHandler
+import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatNetwork
 
 object CatchOnDefeatMod : ModInitializer {
     @Suppress("MemberVisibilityCanBePrivate")
@@ -39,5 +41,8 @@ object CatchOnDefeatMod : ModInitializer {
             Priority.LOWEST,
             CancelPokeballHitWhenOnlyJoinByDefeatHandler::handle
         )
+        CatchOnDefeatNetwork
     }
+
+    fun modResource(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, name)
 }
