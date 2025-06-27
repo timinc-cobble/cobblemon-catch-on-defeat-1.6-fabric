@@ -15,6 +15,12 @@
         "adapter": "kotlin",
         "value": "us.timinc.mc.cobblemon.catchondefeat.CatchOnDefeatMod"
       }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "us.timinc.mc.cobblemon.catchondefeat.CatchOnDefeatClientMod"
+      }
     ]
   },
   "depends": {

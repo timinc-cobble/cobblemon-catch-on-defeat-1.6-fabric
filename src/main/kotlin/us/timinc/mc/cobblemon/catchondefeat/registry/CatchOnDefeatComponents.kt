@@ -18,4 +18,12 @@ object CatchOnDefeatComponents {
     fun joinedTeam(pokemon: Pokemon) = Component.translatable(
         "catch_on_defeat.feedback.joined_team", pokemon.getDisplayName()
     )
+
+    fun wouldLikeToJoinTeam(name: Component) = Component.translatable(
+        "catch_on_defeat.ui.would_like_to_join", name
+    )
+
+    fun wasReleased(name: Component) = Component.translatable(
+        "catch_on_defeat.feedback.released", name
+    )
 }
