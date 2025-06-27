@@ -5,7 +5,7 @@ import us.timinc.mc.cobblemon.catchondefeat.api.network.ServerNetworkHandler
 import us.timinc.mc.cobblemon.catchondefeat.event.handler.AttemptJoinOnDefeatHandler
 import us.timinc.mc.cobblemon.catchondefeat.holding.PokemonJoinPartyHolding
 import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatComponents.wasReleased
-import java.util.UUID
+import java.util.*
 
 object JoinConfirmed : ServerNetworkHandler<JoinConfirmed.Packet>() {
     @JvmRecord

@@ -7,7 +7,7 @@ import us.timinc.mc.cobblemon.catchondefeat.api.network.ClientNetworkHandler
 import us.timinc.mc.cobblemon.catchondefeat.network.serverbound.JoinConfirmed
 import us.timinc.mc.cobblemon.catchondefeat.registry.CatchOnDefeatNetwork.sendServerPacket
 import us.timinc.mc.cobblemon.catchondefeat.screen.ConfirmJoinScreen
-import java.util.UUID
+import java.util.*
 
 object ConfirmJoin : ClientNetworkHandler<ConfirmJoin.Packet>() {
     @JvmRecord
